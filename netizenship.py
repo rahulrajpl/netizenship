@@ -16,7 +16,7 @@ from time import sleep
 from bs4 import BeautifulSoup
 import concurrent.futures
 from pyfiglet import figlet_format
-import eventlet
+
 
 global websites
 websites = {
