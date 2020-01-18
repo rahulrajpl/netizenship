@@ -1,0 +1,3 @@
+[console_scripts]
+netizenship=netizenship:main
+

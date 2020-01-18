@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "netizenship"
+version = "0.1.6"
+description = "Tool to check the username with popular websites for membership"
+authors = ["Rahul Raj <rahulrajpl@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+requests = "^2.22.0"
+beautifulsoup4 = "^4.8.2"
+pyfiglet = "^0.8.post1"
+termcolor = "^1.1.0"
+
+[tool.poetry.dev-dependencies]
+
+[tool.poetry.scripts]
+netizenship = 'netizenship:main'
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
