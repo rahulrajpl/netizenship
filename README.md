@@ -11,19 +11,24 @@ This is a commandline tool to find the online presence of a username in popular 
 
 Install this tool via following command
 
- `pip install netizenship`
+~~~
+pip install netizenship
+~~~
 
 ## Usage
 
 Once the tool is installed, run it by executing the command 
 
-`netizenship`
+~~~
+netizenship
+~~~
+
 
 and then enter the username to search for
 
 ## Contribute
 
-Development started on 18 Jan. Present version is at infant stage. All contributions are welcomed.
+This tool is presently at infant stage. I highly appreciate improvements and suggestions.
 
 ## License
 
