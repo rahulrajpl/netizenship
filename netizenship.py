@@ -46,7 +46,7 @@ def main():
         else:
             link = url+uname
         state = "FAIL"
-        msg = '--exceptin--'
+        msg = '--exception--'
         try:
             response = requests.get(link)
             tag = soup.find(id=response.status_code)
@@ -57,9 +57,45 @@ def main():
             print(site.rjust(width), ':', colored(state.ljust(width//2), 'red') , '(Status:', msg, ')')
         
         else:
-            state = 'SUCCESS'
-            counter += 1
-            print(site.rjust(width), ':', colored(state.ljust(width//2), 'green'), '(Status:', msg, ')')
+            res_soup = BeautifulSoup(response.content, 'html.parser')
+            if site == 'Pastebin':
+                if len(res_soup.find_all('h1')) == 0:
+                    msg = 'broken URL'
+                    print(site.rjust(width), ':', colored(state.ljust(width//2), 'red') , '(Status:', msg, ')')
+                else:
+                    state = 'SUCCESS'
+                    counter += 1
+                    print(site.rjust(width), ':', colored(state.ljust(width//2), 'green'), '(Status:', msg, ')')
+            elif site == 'Wordpress':
+                if 'doesn’t exist' or 'blocked' in res_soup:
+                    msg = 'broken URL'
+                    print(site.rjust(width), ':', colored(state.ljust(width//2), 'red') , '(Status:', msg, ')')
+                else:
+                    state = 'SUCCESS'
+                    counter += 1
+                    print(site.rjust(width), ':', colored(state.ljust(width//2), 'green'), '(Status:', msg, ')')
+            # elif site == 'Imgur':
+                # ToDo
+            elif site == 'GitLab':
+                if 'Sign in' in res_soup.title.text:
+                    msg = 'broken URL'
+                    print(site.rjust(width), ':', colored(state.ljust(width//2), 'red') , '(Status:', msg, ')')
+                else:
+                    state = 'SUCCESS'
+                    counter += 1
+                    print(site.rjust(width), ':', colored(state.ljust(width//2), 'green'), '(Status:', msg, ')')
+            elif site == 'HackerNews':
+                if 'No such user.' in res_soup:
+                    msg = 'No Such User!'
+                    print(site.rjust(width), ':', colored(state.ljust(width//2), 'red') , '(Status:', msg, ')')
+                else:
+                    state = 'SUCCESS'
+                    counter += 1
+                    print(site.rjust(width), ':', colored(state.ljust(width//2), 'green'), '(Status:', msg, ')')
+            else:
+                state = 'SUCCESS'
+                counter += 1
+                print(site.rjust(width), ':', colored(state.ljust(width//2), 'green'), '(Status:', msg, ')')
 
     websites = {
         'Facebook': 'https://www.facebook.com/',
@@ -74,7 +110,7 @@ def main():
         'Disqus': 'https://disqus.com/',
         'Medium': 'https://medium.com/',
         'AboutMe': 'https://about.me/',
-        'Imgur': 'https://imgur.com/user/',
+        # 'Imgur': 'https://imgur.com/user/', returns a landing page. to do
         'Flipboard': 'https://flipboard.com/',
         'Slideshare': 'https://slideshare.net/',
         'Spotify': 'https://open.spotify.com/user/',
@@ -97,7 +133,7 @@ def main():
         'Blogger': '.blogspot.com',
         'Wordpress': '.wordpress.com',
         'Tumbler': '.tumblr.com',
-        'Deviantart': '.deviantart.com"',
+        # 'Deviantart': '.deviantart.com"', This website is either blocking/delaying the script
         'LiveJournel': '.livejournal.com',
         'Slack': '.slack.com',
 
@@ -107,17 +143,19 @@ def main():
     
 #------------------------------------------------------------------------
     # Following multithreading way goes to kind of deadlock sometime.
-    # Help-required to debug. As of now a for loop runs, (slowly) 
+    # Help-required to debug. 
 
-    # with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-    #     try:
-    #         executor.map(get_website_membership, list(websites.keys()), timeout=5)
-    #     except:
-    #         print('Exception occured, skipping')
-    #         pass
-    
-    for site in list(websites.keys()):
-        get_website_membership(site)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+        try:
+            executor.map(get_website_membership, list(websites.keys()), timeout=5)
+        except:
+            print('Exception occured, skipping')
+            pass
+
+    # ------for loop runs, (slowly) ------
+    # for site in list(websites.keys()):
+    #     get_website_membership(site)
+
     n_websites = len(list(websites.keys()))
     print('Summary: User {} has membership in {}/{} websites'.format(uname, counter, n_websites))
     banner('completed')
