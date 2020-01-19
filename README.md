@@ -12,7 +12,7 @@ This is a commandline tool to find the online presence of a username in popular 
 Install this tool via following command
 
 ~~~
-pip install netizenship
+sudo pip3 install netizenship
 ~~~
 
 ## Usage
