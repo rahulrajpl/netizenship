@@ -36,79 +36,107 @@ def main():
     counter = 0 # to count no of success
     page = requests.get(status_code_html)
     soup = BeautifulSoup(page.content, 'html.parser')
+    headers = {'user-agent':'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Mobile Safari/537.36'}
 
 
     def get_website_membership(site):
+
+        def print_fail():
+            print(site.rjust(width), ':', colored(state.ljust(width//2), 'red') , '(Status:', msg, ')')
+
+
+        def print_success():
+            print(site.rjust(width), ':', colored(state.ljust(width//2), 'green'), '(Status:', msg, ')')
+
+            
         url = websites[site]
         global counter
+        state = "FAIL"
+        msg = '--exception--'
+
         if not url[:1]=='h':
             link = 'https://'+uname+url
         else:
             link = url+uname
-        state = "FAIL"
-        msg = '--exception--'
+
         try:
-            response = requests.get(link)
+            if site=='Youtube' or 'Twitter':
+                response = requests.get(link)
+            else:
+                response = requests.get(link, headers=headers)
             tag = soup.find(id=response.status_code)
             msg = tag.find_parent('dt').text
             response.raise_for_status()
             
         except:
-            print(site.rjust(width), ':', colored(state.ljust(width//2), 'red') , '(Status:', msg, ')')
-        
+            print_fail()
+
         else:
             res_soup = BeautifulSoup(response.content, 'html.parser')
             if site == 'Pastebin':
                 if len(res_soup.find_all('h1')) == 0:
                     msg = 'broken URL'
-                    print(site.rjust(width), ':', colored(state.ljust(width//2), 'red') , '(Status:', msg, ')')
+                    print_fail()
+
                 else:
                     state = 'SUCCESS'
                     counter += 1
-                    print(site.rjust(width), ':', colored(state.ljust(width//2), 'green'), '(Status:', msg, ')')
+                    print_success()
+
             elif site == 'Wordpress':
                 if 'doesn’t exist' or 'blocked' in res_soup:
                     msg = 'broken URL'
-                    print(site.rjust(width), ':', colored(state.ljust(width//2), 'red') , '(Status:', msg, ')')
+                    print_fail()
                 else:
                     state = 'SUCCESS'
                     counter += 1
-                    print(site.rjust(width), ':', colored(state.ljust(width//2), 'green'), '(Status:', msg, ')')
+                    print_success()
+            
             # elif site == 'Imgur':
                 # ToDo
+
             elif site == 'GitLab':
                 if 'Sign in' in res_soup.title.text:
                     msg = 'broken URL'
-                    print(site.rjust(width), ':', colored(state.ljust(width//2), 'red') , '(Status:', msg, ')')
+                    print_fail()
                 else:
                     state = 'SUCCESS'
                     counter += 1
-                    print(site.rjust(width), ':', colored(state.ljust(width//2), 'green'), '(Status:', msg, ')')
+                    print_success()
             elif site == 'HackerNews':
                 if 'No such user.' in res_soup:
                     msg = 'No Such User!'
-                    print(site.rjust(width), ':', colored(state.ljust(width//2), 'red') , '(Status:', msg, ')')
+                    print_fail()
                 else:
                     state = 'SUCCESS'
                     counter += 1
-                    print(site.rjust(width), ':', colored(state.ljust(width//2), 'green'), '(Status:', msg, ')')
+                    print_success()
+            elif site == 'ProductHunt':
+                if 'Page Not Found' in res_soup.text:
+                    msg = 'No Such User!'
+                    print_fail()
+                else:
+                    state = 'SUCCESS'
+                    counter += 1
+                    print_success()
             else:
                 state = 'SUCCESS'
                 counter += 1
-                print(site.rjust(width), ':', colored(state.ljust(width//2), 'green'), '(Status:', msg, ')')
+                print_success()
 
     websites = {
         'Facebook': 'https://www.facebook.com/',
         'Twitter': 'https://twitter.com/',
         'Instagram': 'https://www.instagram.com/',
         'Youtube': 'https://www.youtube.com/user/',
-        'Reddit': 'https://www.reddit.com/user/',
+        # 'Reddit': 'https://www.reddit.com/user/', To Do
+        'ProductHunt': 'https://www.producthunt.com/@',
         'PInterest': 'https://www.pinterest.com/',
         'Flickr': 'https://www.flickr.com/people/',
         'Vimeo': 'https://vimeo.com/',
         'Soundcloud': 'https://soundcloud.com/',
         'Disqus': 'https://disqus.com/',
-        'Medium': 'https://medium.com/',
+        'Medium': 'https://medium.com/@',
         'AboutMe': 'https://about.me/',
         # 'Imgur': 'https://imgur.com/user/', returns a landing page. to do
         'Flipboard': 'https://flipboard.com/',
@@ -145,16 +173,16 @@ def main():
     # Following multithreading way goes to kind of deadlock sometime.
     # Help-required to debug. 
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-        try:
-            executor.map(get_website_membership, list(websites.keys()), timeout=5)
-        except:
-            print('Exception occured, skipping')
-            pass
+    # with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+    #     try:
+    #         executor.map(get_website_membership, list(websites.keys()), timeout=5)
+    #     except:
+    #         print('Exception occured, skipping')
+    #         pass
 
     # ------for loop runs, (slowly) ------
-    # for site in list(websites.keys()):
-    #     get_website_membership(site)
+    for site in list(websites.keys()):
+        get_website_membership(site)
 
     n_websites = len(list(websites.keys()))
     print('Summary: User {} has membership in {}/{} websites'.format(uname, counter, n_websites))

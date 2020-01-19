@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "netizenship"
-version = "0.1.8"
+version = "0.1.9"
 description = "Tool to check the username with popular websites for membership"
 authors = ["Rahul Raj <rahulrajpl@gmail.com>"]
 
