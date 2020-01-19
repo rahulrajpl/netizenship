@@ -14,8 +14,9 @@ import requests
 from termcolor import colored
 from time import sleep
 from bs4 import BeautifulSoup
-import concurrent.futures
+from multiprocessing.pool import ThreadPool
 from pyfiglet import figlet_format
+
 
 def main():
     def banner(text, ch='=', length=78):
@@ -38,17 +39,14 @@ def main():
     soup = BeautifulSoup(page.content, 'html.parser')
     headers = {'user-agent':'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Mobile Safari/537.36'}
 
-
     def get_website_membership(site):
 
         def print_fail():
             print(site.rjust(width), ':', colored(state.ljust(width//2), 'red') , '(Status:', msg, ')')
 
-
         def print_success():
             print(site.rjust(width), ':', colored(state.ljust(width//2), 'green'), '(Status:', msg, ')')
 
-            
         url = websites[site]
         global counter
         state = "FAIL"
@@ -67,7 +65,7 @@ def main():
             tag = soup.find(id=response.status_code)
             msg = tag.find_parent('dt').text
             response.raise_for_status()
-            
+
         except:
             print_fail()
 
@@ -91,7 +89,7 @@ def main():
                     state = 'SUCCESS'
                     counter += 1
                     print_success()
-            
+
             # elif site == 'Imgur':
                 # ToDo
 
@@ -164,31 +162,14 @@ def main():
         # 'Deviantart': '.deviantart.com"', This website is either blocking/delaying the script
         'LiveJournel': '.livejournal.com',
         'Slack': '.slack.com',
-
     }
+    results = []
 
-    
-    
-#------------------------------------------------------------------------
-    # Following multithreading way goes to kind of deadlock sometime.
-    # Help-required to debug. 
-
-    # with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-    #     try:
-    #         executor.map(get_website_membership, list(websites.keys()), timeout=5)
-    #     except:
-    #         print('Exception occured, skipping')
-    #         pass
-
-    # ------for loop runs, (slowly) ------
-    for site in list(websites.keys()):
-        get_website_membership(site)
-
+    p = ThreadPool(10)
+    p.map(get_website_membership, list(websites.keys()))
     n_websites = len(list(websites.keys()))
     print('Summary: User {} has membership in {}/{} websites'.format(uname, counter, n_websites))
     banner('completed')
-    
-#-------------------------------------------------------------------------
 
 
 if __name__ == '__main__':
