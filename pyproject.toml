@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "netizenship"
-version = "0.2.2"
+version = "0.2.3"
 description = "Tool to check the username with popular websites for membership"
 authors = ["Rahul Raj <rahulrajpl@gmail.com>"]
 readme = "README.md"
@@ -13,6 +13,7 @@ requests = "^2.22.0"
 beautifulsoup4 = "^4.8.2"
 pyfiglet = "^0.8.post1"
 termcolor = "^1.1.0"
+importlib_metadata = "^1.4.0"
 
 [tool.poetry.dev-dependencies]
 
