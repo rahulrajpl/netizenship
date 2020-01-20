@@ -1,8 +1,11 @@
 [tool.poetry]
 name = "netizenship"
-version = "0.1.9"
+version = "0.2.2"
 description = "Tool to check the username with popular websites for membership"
 authors = ["Rahul Raj <rahulrajpl@gmail.com>"]
+readme = "README.md"
+homepage = "https://github.com/rahulrajpl/netizenship"
+documentation = "https://github.com/rahulrajpl/netizenship/blob/master/README.md"
 
 [tool.poetry.dependencies]
 python = "^3.7"

@@ -16,7 +16,30 @@ from time import sleep
 from bs4 import BeautifulSoup
 from multiprocessing.pool import ThreadPool
 from pyfiglet import figlet_format
+import json
+import urllib.request
+import sys
 
+try:
+    from importlib.metadata import version
+except ImportError:
+    from importlib_metadata import version
+
+from distutils.version import LooseVersion
+
+def check_latest_version():
+    name = 'netizenship'
+    installed_version = LooseVersion(version(name))
+
+    # fetch package metadata from PyPI
+    pypi_url = f'https://pypi.org/pypi/{name}/json'
+    response = urllib.request.urlopen(pypi_url).read().decode()
+    latest_version = max(LooseVersion(s) for s in json.loads(response)['releases'].keys())
+    print(f'Current version: {installed_version}')
+    
+    if not installed_version==latest_version:
+        print(f'Version {latest_version} available. To continue using the tool by running sudo pip3 install --upgrade netizenship')
+        exit()
 
 def main():
     def banner(text, ch='=', length=78):
@@ -27,6 +50,10 @@ def main():
 
     ascii_banner = figlet_format('Netizenship')
     print(ascii_banner)
+    
+    # Check the version status.
+    check_latest_version()
+
     banner_text = "MIT License, Copyright (c) 2020 Rahul Raj"
     banner(banner_text)
 
