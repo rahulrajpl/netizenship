@@ -1,4 +1,5 @@
-# Netizenship![license](https://img.shields.io/github/license/rahulrajpl/netizenship) 
+![logo](logo.png)
+# Netizenship
 
 ![tweet](https://img.shields.io/twitter/url?url=https%3A%2F%2Fgithub.com%2Frahulrajpl%2Fnetizenship)
 ![stars](https://img.shields.io/github/stars/rahulrajpl/netizenship?style=social)
@@ -34,7 +35,7 @@ This tool is presently at infant stage. I highly appreciate improvements and sug
 
 ## License
 
-MIT License 
+![license](https://img.shields.io/github/license/rahulrajpl/netizenship) 
 
 Copyright (c) 2020 Rahul Raj
 
