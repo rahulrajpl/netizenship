@@ -1,6 +1,6 @@
-![logo](logo.png)
-# Netizenship
 
+# Netizenship
+--------------------------
 ![tweet](https://img.shields.io/twitter/url?url=https%3A%2F%2Fgithub.com%2Frahulrajpl%2Fnetizenship)
 ![stars](https://img.shields.io/github/stars/rahulrajpl/netizenship?style=social)
 ![forks](https://img.shields.io/github/forks/rahulrajpl/netizenship?style=social)
