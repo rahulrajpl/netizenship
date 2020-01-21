@@ -43,7 +43,7 @@ This tool is presently at infant stage. 38 websites are covered presently. I hig
  - Add email lookup as an option
 
 ### Thanks to contributors 
-    - [Robert Putt](https://github.com/robputt796)
+- [Robert Putt](https://github.com/robputt796)
 
 ## License
 
