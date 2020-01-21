@@ -1,9 +1,10 @@
 #!/usr/bin/python3
-"""Tool to automatically check the membership of a given username
-in popular websites. 
+"""
+Tool to automatically check the membership of a given username
+in popular websites.
 
-
-Inspired by: https://github.com/thelinuxchoice/userrecon/blob/master/userrecon.sh
+Inspired by:
+    https://github.com/thelinuxchoice/userrecon/blob/master/userrecon.sh
 
 MIT License
 
@@ -12,13 +13,12 @@ Copyright (c) 2020 Rahul Raj
 
 import requests
 from termcolor import colored
-from time import sleep
 from bs4 import BeautifulSoup
 from multiprocessing.pool import ThreadPool
 from pyfiglet import figlet_format
 import json
 import urllib.request
-import sys
+
 
 try:
     from importlib.metadata import version
@@ -26,6 +26,7 @@ except ImportError:
     from importlib_metadata import version
 
 from distutils.version import LooseVersion
+
 
 def check_latest_version():
     name = 'netizenship'
@@ -36,10 +37,12 @@ def check_latest_version():
     response = urllib.request.urlopen(pypi_url).read().decode()
     latest_version = max(LooseVersion(s) for s in json.loads(response)['releases'].keys())
     print(f'Current version: {installed_version}')
-    
-    if not installed_version==latest_version:
-        print(f'Version {latest_version} available. To continue using the tool by running sudo pip3 install --upgrade netizenship')
+
+    if not installed_version == latest_version:
+        print(f'Version {latest_version} available. To continue using the '
+              'tool by running sudo pip3 install --upgrade netizenship')
         exit()
+
 
 def main():
     def banner(text, ch='=', length=78):
@@ -47,29 +50,31 @@ def main():
         banner = spaced_text.center(length, ch)
         print(banner)
 
-
     ascii_banner = figlet_format('Netizenship')
     print(ascii_banner)
-    
+
     # Check the version status.
     check_latest_version()
 
     banner_text = "MIT License, Copyright (c) 2020 Rahul Raj"
     banner(banner_text)
 
-    status_code_html = 'https://en.wikipedia.org/wiki/List_of_HTTP_status_codes'
+    wiki_link = 'https://en.wikipedia.org/wiki/List_of_HTTP_status_codes'
     uname = input("Enter username: ")
-    width = 15 # to pretty print
+    width = 15  # to pretty print
     global counter
-    counter = 0 # to count no of success
-    page = requests.get(status_code_html)
+    counter = 0  # to count no of success
+    page = requests.get(wiki_link)
     soup = BeautifulSoup(page.content, 'html.parser')
-    headers = {'user-agent':'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Mobile Safari/537.36'}
+    user_agent = ('Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) '
+                  'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130'
+                  ' Mobile Safari/537.36')
+    headers = {'user-agent': user_agent}
 
     def get_website_membership(site):
 
         def print_fail():
-            print(site.rjust(width), ':', colored(state.ljust(width//2), 'red') , '(Status:', msg, ')')
+            print(site.rjust(width), ':', colored(state.ljust(width//2), 'red'), '(Status:', msg, ')')
 
         def print_success():
             print(site.rjust(width), ':', colored(state.ljust(width//2), 'green'), '(Status:', msg, ')')
@@ -79,13 +84,13 @@ def main():
         state = "FAIL"
         msg = '--exception--'
 
-        if not url[:1]=='h':
+        if not url[:1] == 'h':
             link = 'https://'+uname+url
         else:
             link = url+uname
 
         try:
-            if site=='Youtube' or 'Twitter':
+            if site == 'Youtube' or 'Twitter':
                 response = requests.get(link)
             else:
                 response = requests.get(link, headers=headers)
@@ -93,7 +98,7 @@ def main():
             msg = tag.find_parent('dt').text
             response.raise_for_status()
 
-        except:
+        except Exception:
             print_fail()
 
         else:
@@ -186,16 +191,17 @@ def main():
         'Blogger': '.blogspot.com',
         'Wordpress': '.wordpress.com',
         'Tumbler': '.tumblr.com',
-        # 'Deviantart': '.deviantart.com"', This website is either blocking/delaying the script
+        # 'Deviantart': '.deviantart.com"',
+        # ^ This website is either blocking/delaying the script
         'LiveJournel': '.livejournal.com',
         'Slack': '.slack.com',
     }
-    results = []
 
     p = ThreadPool(10)
     p.map(get_website_membership, list(websites.keys()))
     n_websites = len(list(websites.keys()))
-    print('Summary: User {} has membership in {}/{} websites'.format(uname, counter, n_websites))
+    print('Summary: User {} has membership in {}/{} websites'
+          .format(uname, counter, n_websites))
     banner('completed')
 
 
