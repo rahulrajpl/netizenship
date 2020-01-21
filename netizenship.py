@@ -40,7 +40,7 @@ def check_latest_version():
 
     if not installed_version == latest_version:
         print(f'Version {latest_version} available. To continue using the '
-              'tool by running sudo pip3 install --upgrade netizenship')
+              'tool, run "sudo pip3 install --upgrade netizenship"')
         exit()
 
 
