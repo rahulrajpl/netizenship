@@ -1,6 +1,6 @@
 
 # Netizenship
-
+this was amazing project
 
 ![issues](https://img.shields.io/github/issues/rahulrajpl/netizenship)
 ![stars](https://img.shields.io/github/stars/rahulrajpl/netizenship?style=social)
