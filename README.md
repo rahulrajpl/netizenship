@@ -7,13 +7,13 @@
 ![forks](https://img.shields.io/github/forks/rahulrajpl/netizenship?style=social)
 
 
-This is a commandline tool to find the online presence of a username in popular social media websites like Facebook, Instagram, Twitter, etc. Current version is 0.2.3
+This is a commandline tool helps to find the online presence of a username in popular social media websites like Facebook, Instagram, Twitter, etc. Current version is 0.2.3
 
 ![sneakpeak](./sneak.gif)
 
 ## Installation
 
-Install this tool via following command
+Install this tool via following commands
 
 ~~~
 $ sudo pip3 install netizenship
@@ -36,7 +36,7 @@ and then enter the username to search for
 
 ## Contribute
 
-This tool is presently at infant stage. 38 websites are covered presently. I highly appreciate improvements and suggestions. Scope for additions/ improvements are broadly as follows: -
+This tool is presently at infant stage. 38 websites are covered presently. I highly appreciate improvements and suggestions. Scope for additions/ improvements are broadly as follows:-
  
  - More websites to be added.
  - Report broken links or bugs with certain websites
