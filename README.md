@@ -26,7 +26,7 @@ $ sudo pip3 install --upgrade netizenship
 
 ## Usage
 
-Once the tool is installed, run it by executing the command 
+Once the tool is installed, run it by executing the command.
 
 ~~~
 $ netizenship
